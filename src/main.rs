@@ -25,6 +25,7 @@ mod layout;
 mod led;
 mod protocol;
 mod serial;
+mod theme;
 mod usb;
 
 use hal::dma::DmaExt;

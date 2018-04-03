@@ -18,13 +18,13 @@ pub enum BluetoothMode {
 pub struct Bluetooth<BUFFER: 'static + Unsize<[u8]>> {
     pub serial: Serial<BluetoothUsart, BUFFER>,
     pub rx_transfer: Option<Transfer<BUFFER>>,
-    mode: BluetoothMode,
+    pub mode: BluetoothMode,
     /// 4-bit bitfield, indicating whether the BT chip has a host
     /// saved in that slot. TODO: investigate high bits (issue #37)
     saved_hosts: u8,
     /// The currently connected slot (1-4), or disconnected (0), or
     /// the current host is not saved (12)
-    connected_host: u8,
+    pub connected_host: u8,
 }
 
 impl<BUFFER> Bluetooth<BUFFER>

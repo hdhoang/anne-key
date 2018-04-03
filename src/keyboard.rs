@@ -87,13 +87,19 @@ impl Keyboard {
             if bt_layer_next && !bt_layer_current {
                 bluetooth.update_led(led, self.send_usb_report).log_error();
             } else if bt_layer_current && !bt_layer_next {
-                led.theme_mode().log_error();
+                let mut buffer = [0xcau8; 25 * 5 + 2];
+                let payload_length = super::theme::layout_to_theme(
+                    &super::layout::BASE,
+                    0,
+                    bluetooth.connected_host,
+                    bluetooth.mode,
+                ).fill_payload(&mut buffer);
+                led.set_keys(&buffer[..payload_length]).log_error();
             }
 
             self.layers.finish();
 
             bluetooth.send_report(&hid.report).log_error();
-            led.send_keys(state).log_error();
             if self.send_usb_report {
                 usb.update_report(&hid.report);
             }
