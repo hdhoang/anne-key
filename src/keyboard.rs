@@ -5,7 +5,7 @@ use crate::hidreport::HidReport;
 use crate::keycodes::KeyCode;
 use crate::keymatrix::{KeyState, COLUMNS, ROWS};
 use crate::layout::LAYERS;
-use crate::layout::LAYER_BT;
+use crate::layout::{LAYER_BT, LAYER_FN};
 use crate::led::Led;
 use crate::usb::Usb;
 use bit_field::{BitArray, BitField};
@@ -84,16 +84,31 @@ impl Keyboard {
 
             let bt_layer_current: bool = self.bluetooth_mode_enabled();
             let bt_layer_next: bool = self.layers.next.get_bit(LAYER_BT as usize);
-            if bt_layer_next && !bt_layer_current {
+            if self.layers.next.get_bit(LAYER_FN as usize)
+                || self.layers.current.get_bit(LAYER_FN as usize)
+            {
+                let mut buffer = [0xcau8; 25 * 5 + 2];
+                let payload_length = super::theme::layout_to_theme(
+                    &super::layout::FN,
+                    0,
+                    bluetooth.connected_host,
+                    bluetooth.mode,
+                    self.send_usb_report,
+                )
+                .fill_payload(&mut buffer);
+                led.set_keys(&buffer[..payload_length]).log_error();
+            } else if bt_layer_next && !bt_layer_current {
                 bluetooth.update_led(led, self.send_usb_report).log_error();
-            } else if bt_layer_current && !bt_layer_next {
+            } else {
                 let mut buffer = [0xcau8; 25 * 5 + 2];
                 let payload_length = super::theme::layout_to_theme(
                     &super::layout::BASE,
                     0,
                     bluetooth.connected_host,
                     bluetooth.mode,
-                ).fill_payload(&mut buffer);
+                    self.send_usb_report,
+                )
+                .fill_payload(&mut buffer);
                 led.set_keys(&buffer[..payload_length]).log_error();
             }
 

@@ -11,13 +11,7 @@ use hal::gpio::gpioc::PC15;
 use hal::gpio::{Input, Output};
 use stm32l1::stm32l151::SYST;
 
-use crate::bluetooth::BluetoothMode;
-use crate::keycodes::KeyIndex;
-use crate::keymatrix::KeyState;
 use crate::layout::BT;
-use crate::protocol::{LedOp, Message, MsgType};
-use crate::serial::led_usart::LedUsart;
-use crate::serial::{Serial, Transfer};
 use crate::theme::layout_to_theme;
 
 pub enum LedMode {
@@ -137,8 +131,14 @@ where
         keyboard_send_usb_report: bool,
     ) -> nb::Result<(), !> {
         let mut buffer = [0xcau8; 25 * 5 + 2];
-        let payload_length =
-            layout_to_theme(&BT, saved_hosts, connected_host, mode, keyboard_send_usb_report).fill_payload(&mut buffer);
+        let payload_length = layout_to_theme(
+            &BT,
+            saved_hosts,
+            connected_host,
+            mode,
+            keyboard_send_usb_report,
+        )
+        .fill_payload(&mut buffer);
         self.set_keys(&buffer[..payload_length])
     }
 

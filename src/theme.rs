@@ -39,10 +39,16 @@ pub fn layout_to_theme(
     bt_saved_hosts: u8,
     bt_connected_host: u8,
     bt_mode: BluetoothMode,
+    keyboard_send_usb_report: bool,
 ) -> LedTheme {
     let mut theme = LedTheme::new();
     for (index, action) in layout.iter().enumerate() {
-        theme.key_colors[index] = action.to_color(bt_saved_hosts, bt_connected_host, bt_mode);
+        theme.key_colors[index] = action.to_color(
+            bt_saved_hosts,
+            bt_connected_host,
+            bt_mode,
+            keyboard_send_usb_report,
+        );
     }
     theme
 }
