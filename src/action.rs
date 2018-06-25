@@ -68,6 +68,7 @@ impl Action {
     ) -> Option<(u8, u8, u8, u8)> {
         use self::Action::*;
         use led::LedMode;
+        use layout::LAYER_FN;
         const ON: u8 = LedMode::On as u8;
         const FLASH: u8 = LedMode::Flash as u8;
 
@@ -77,6 +78,7 @@ impl Action {
             BtHostListQuery | LedNextBrightness => Some((0xff, 0xff, 0xff, ON)),
             Reset | LedOff | BtOff => Some((0xff, 0, 0, ON)),
             LayerToggle(_) => Some((0xff, 0xff, 0, ON)),
+            LayerMomentary(LAYER_FN) => Some((0xff, 0xff, 0xff, ON)),
             LayerOff(_) | LedNextTheme | LedOn => Some((0, 0xff, 0, FLASH)),
             BtBroadcast | LedNextAnimationSpeed => Some((0, 0xff, 0, ON)),
             BtOn => Some((0, 0, 0xff, ON)),
@@ -103,6 +105,7 @@ impl Action {
             Key(code) if connected_host == 3 && code == KeyCode::N3 => Some((0, 0xff, 0xff, ON)),
             Key(code) if connected_host == 4 && code == KeyCode::N4 => Some((0, 0xff, 0xff, ON)),
             Key(code) if code.is_modifier() => Some((0, 0xff, 0, ON)),
+            Key(code) if KeyCode::PScreen <= code && code <= KeyCode::Up => Some((0x1e, 0xee, 0xab, ON)),
             _ => None,
         }
     }
