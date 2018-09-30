@@ -13,7 +13,7 @@ main() {
 
         if [ ${TRAVIS_OS_NAME} != 'osx' ]; then
             mkdir binutils
-            curl -L https://www.archlinux.org/packages/community/x86_64/arm-none-eabi-binutils/download/ | tar --strip-components=1 -C binutils -x
+            curl -L https://www.archlinux.org/packages/community/x86_64/arm-none-eabi-binutils/download/ | tar --strip-components=1 -C binutils -Jx
         fi
 }
 

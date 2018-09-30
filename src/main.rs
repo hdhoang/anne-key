@@ -2,11 +2,13 @@
 #![feature(never_type)]
 #![feature(non_exhaustive)]
 #![feature(unsize)]
+#![no_main]
 #![no_std]
 
 extern crate bare_metal;
 extern crate bit_field;
 extern crate cortex_m;
+extern crate cortex_m_rt_macros;
 extern crate cortex_m_rtfm as rtfm;
 extern crate cortex_m_semihosting;
 extern crate embedded_hal;
@@ -70,7 +72,7 @@ app! {
     },
 
     tasks: {
-        SYS_TICK: {
+        SysTick: {
             path: tick,
             resources: [BLUETOOTH, LED, KEY_MATRIX, SCB, SYST, KEYBOARD, USB],
         },
@@ -196,7 +198,7 @@ fn idle() -> ! {
     }
 }
 
-fn tick(_t: &mut Threshold, mut r: SYS_TICK::Resources) {
+fn tick(_t: &mut Threshold, mut r: SysTick::Resources) {
     r.KEY_MATRIX.sample(&r.SYST);
     r.KEYBOARD.process(
         &r.KEY_MATRIX.state,

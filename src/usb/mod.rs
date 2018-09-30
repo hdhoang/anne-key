@@ -40,14 +40,18 @@ impl Usb {
 
         usb.usb_cntr.modify(|_, w| w.pdwn().clear_bit());
         usb.usb_cntr.modify(|_, w| {
-            w.ctrm().set_bit()
-             .errm().set_bit()
-             .pmaovrm().set_bit()
-             //.wkupm().set_bit()
-             //.suspm().set_bit()
-             //.esofm().set_bit()
-             //.sofm().set_bit()
-             .resetm().set_bit()
+            w.ctrm()
+                .set_bit()
+                .errm()
+                .set_bit()
+                .pmaovrm()
+                .set_bit()
+                //.wkupm().set_bit()
+                //.suspm().set_bit()
+                //.esofm().set_bit()
+                //.sofm().set_bit()
+                .resetm()
+                .set_bit()
         });
         usb.btable.reset();
         usb.usb_cntr.modify(|_, w| w.fres().clear_bit());
