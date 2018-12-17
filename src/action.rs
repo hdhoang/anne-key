@@ -67,8 +67,8 @@ impl Action {
         mode: BluetoothMode,
     ) -> Option<(u8, u8, u8, u8)> {
         use self::Action::*;
-        use led::LedMode;
         use layout::LAYER_FN;
+        use led::LedMode;
         const ON: u8 = LedMode::On as u8;
         const FLASH: u8 = LedMode::Flash as u8;
 
@@ -105,7 +105,9 @@ impl Action {
             Key(code) if connected_host == 3 && code == KeyCode::N3 => Some((0, 0xff, 0xff, ON)),
             Key(code) if connected_host == 4 && code == KeyCode::N4 => Some((0, 0xff, 0xff, ON)),
             Key(code) if code.is_modifier() => Some((0, 0xff, 0, ON)),
-            Key(code) if KeyCode::PScreen <= code && code <= KeyCode::Up => Some((0x1e, 0xee, 0xab, ON)),
+            Key(code) if KeyCode::PScreen <= code && code <= KeyCode::Up => {
+                Some((0x1e, 0xee, 0xab, ON))
+            }
             _ => None,
         }
     }

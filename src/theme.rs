@@ -13,7 +13,8 @@ impl LedTheme {
     }
     pub fn fill_payload(&self, payload: &mut [u8]) -> usize {
         let mut key_count = 1;
-        for (index, color) in self.key_colors
+        for (index, color) in self
+            .key_colors
             .iter()
             .enumerate()
             .filter(|&(_, c)| c.is_some())

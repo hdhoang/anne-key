@@ -7,7 +7,7 @@ use hidreport::HidReport;
 use keycodes::KeyCode;
 use keymatrix::{KeyState, COLUMNS, ROWS};
 use layout::LAYERS;
-use layout::{LAYER_FN, LAYER_BT};
+use layout::{LAYER_BT, LAYER_FN};
 use led::Led;
 use stm32l151::SCB;
 use usb::Usb;
@@ -80,16 +80,18 @@ impl Keyboard {
             let bt_layer_next: bool = self.layers.next.get_bit(LAYER_BT as usize);
             if bt_layer_next && !bt_layer_current {
                 bluetooth.update_led(led).log_error();
-            } else if self.layers.next.get_bit(LAYER_FN as usize) && !self.layers.current.get_bit(LAYER_FN as usize) {
+            } else if self.layers.next.get_bit(LAYER_FN as usize)
+                && !self.layers.current.get_bit(LAYER_FN as usize)
+            {
                 let mut buffer = [0xcau8; 25 * 5 + 2];
                 let payload_length = super::theme::layout_to_theme(
                     &super::layout::FN,
                     0,
                     bluetooth.connected_host,
                     bluetooth.mode,
-                ).fill_payload(&mut buffer);
+                )
+                .fill_payload(&mut buffer);
                 led.set_keys(&buffer[..payload_length]).log_error();
-
             } else {
                 let mut buffer = [0xcau8; 25 * 5 + 2];
                 let payload_length = super::theme::layout_to_theme(
@@ -97,7 +99,8 @@ impl Keyboard {
                     0,
                     bluetooth.connected_host,
                     bluetooth.mode,
-                ).fill_payload(&mut buffer);
+                )
+                .fill_payload(&mut buffer);
                 led.set_keys(&buffer[..payload_length]).log_error();
             }
 
