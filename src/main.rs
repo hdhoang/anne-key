@@ -12,6 +12,8 @@ extern crate panic_semihosting;
 #[cfg(feature = "use_semihosting")]
 use cortex_m_semihosting::heprintln;
 
+extern crate rtfm3 as rtfm;
+
 mod debug;
 
 #[macro_use]

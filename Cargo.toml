@@ -18,7 +18,11 @@ cortex-m-semihosting = "0.3.1"
 nb = "0.1.1"
 vcell = "0.1.0"
 
-[dependencies.rtfm]
+[dependencies.rtfm4]
+package = "cortex-m-rtfm"
+version = "0.4.2"
+
+[dependencies.rtfm3]
 package = "cortex-m-rtfm"
 git = "https://github.com/hdhoang/cortex-m-rtfm"
 branch = "v0.3-with-cortex-m-v0.5"
