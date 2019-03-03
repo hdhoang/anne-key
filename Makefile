@@ -1,43 +1,39 @@
 GDB ?= arm-none-eabi-gdb
+BIN ?= anne-key
 
 all:
 	$(MAKE) dfu
 
-build:
-	rustup component add llvm-tools-preview
+components:
+	rustup component add llvm-tools-preview rustfmt clippy
 	rustup target add thumbv7m-none-eabi
-	cargo build --release
 
-build-semihosting:
-	rustup component add llvm-tools-preview
-	rustup target add thumbv7m-none-eabi
-	cargo build --release --features use_semihosting
+dfu: components
+	cargo objcopy --bin $(BIN) --release -- -O binary $(BIN).bin
+	./scripts/dfu-convert.py -b 0x08004000:$(BIN).bin $(BIN).dfu
+	ls -l $(BIN).dfu
 
-dfu: build
-	./scripts/generate_dfu.sh
-	ls -l anne-key.dfu
+debug: components
+	cargo build --release --features use_semihosting --bin $(BIN)
+	$(GDB) -x openocd.gdb target/thumbv7m-none-eabi/release/$(BIN)
 
-debug: build-semihosting
-	$(GDB) -x openocd.gdb target/thumbv7m-none-eabi/release/anne-key
+gui-debug: components
+	cargo build --release --features use_semihosting --bin $(BIN)
+	gdbgui --gdb $(GDB) --gdb-args "-x openocd.gdb" target/thumbv7m-none-eabi/release/$(BIN)
 
-gui-debug: build-semihosting
-	gdbgui --gdb $(GDB) --gdb-args "-x openocd.gdb" target/thumbv7m-none-eabi/release/anne-key
+bloat: components
+	cargo bloat $(BLOAT_ARGS) -n 50 --target thumbv7m-none-eabi --bin $(BIN)
 
-bloat:
-	cargo bloat $(BLOAT_ARGS) -n 50 --target thumbv7m-none-eabi
-
-fmt:
-	rustup component add rustfmt
+fmt: components
 	cargo fmt
 
-clippy:
-	rustup component add clippy
+clippy: components
 	cargo clippy
 
 clean:
 	cargo clean
-	rm -f anne-key.bin
-	rm -f anne-key.dfu
+	rm -f $(BIN).bin
+	rm -f $(BIN).dfu
 	rm -rf _book/
 
-.PHONY: all build clean debug openocd bloat fmt clippy
+.PHONY: all clean debug bloat fmt clippy
