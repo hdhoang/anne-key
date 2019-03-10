@@ -9,8 +9,6 @@
 extern crate panic_abort;
 #[cfg(feature = "use_semihosting")]
 extern crate panic_semihosting;
-#[cfg(feature = "use_semihosting")]
-use cortex_m_semihosting::heprintln;
 
 extern crate rtfm3 as rtfm;
 
@@ -35,6 +33,7 @@ use hal::gpio::GpioExt;
 use rtfm::{app, Threshold};
 
 use crate::bluetooth::Bluetooth;
+use crate::debug::heprintln;
 use crate::keyboard::Keyboard;
 use crate::keymatrix::KeyMatrix;
 use crate::led::Led;

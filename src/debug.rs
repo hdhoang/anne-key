@@ -11,6 +11,9 @@ macro_rules! heprintln {
     }};
 }
 
+#[cfg(feature = "use_semihosting")]
+pub use cortex_m_semihosting::heprintln;
+
 pub trait UnwrapLog {
     fn log_error(self);
 }
@@ -20,7 +23,7 @@ impl<E: fmt::Debug> UnwrapLog for Result<(), E> {
     #[cfg(feature = "use_semihosting")]
     fn log_error(self) {
         match self {
-            Err(e) => crate::heprintln!("{:?}", e).unwrap(),
+            Err(e) => heprintln!("{:?}", e).unwrap(),
             _ => {}
         }
     }
