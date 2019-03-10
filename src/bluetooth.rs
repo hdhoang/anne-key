@@ -5,9 +5,9 @@ use super::protocol::{BleOp, KeyboardOp, LedOp, MacroOp, Message, MsgType, Syste
 use super::serial::bluetooth_usart::BluetoothUsart;
 use super::serial::{DmaUsart, Serial, Transfer};
 use crate::debug::UnwrapLog;
+use crate::Threshold;
 use core::marker::Unsize;
 use nb;
-use rtfm::Threshold;
 
 #[derive(Copy, Clone, PartialEq)]
 pub enum BluetoothMode {
@@ -153,8 +153,12 @@ where
                             .log_error();
                     }
                     _ => {
-                        crate::heprintln!("msg: System {} {:?}", message.operation, message.data)
-                            .ok();
+                        anne_key::heprintln!(
+                            "msg: System {} {:?}",
+                            message.operation,
+                            message.data
+                        )
+                        .ok();
                     }
                 }
             }
@@ -167,28 +171,28 @@ where
                     BleOp::AckOn => {
                         // data = [0]
                         // TODO: always getting a [0] too much?
-                        //crate::heprintln!("bt ack on: {:?}", message.data).ok();
+                        //anne_key::heprintln!("bt ack on: {:?}", message.data).ok();
                     }
                     BleOp::AckOff => {
                         // data = [0]
-                        //crate::heprintln!("bt ack off: {:?}", message.data).ok();
+                        //anne_key::heprintln!("bt ack off: {:?}", message.data).ok();
                     }
                     BleOp::AckLegacyMode => {
                         // data = [0]
-                        //crate::heprintln!("bt ack legacy mode: {:?}", message.data).ok();
+                        //anne_key::heprintln!("bt ack legacy mode: {:?}", message.data).ok();
                     }
                     BleOp::AckDeleteHost => {
                         // data = [0]
-                        //crate::heprintln!("bt ack delete host: {:?}", message.data).ok();
+                        //anne_key::heprintln!("bt ack delete host: {:?}", message.data).ok();
                     }
                     BleOp::Pair => {
-                        crate::heprintln!("bt pair").ok();
+                        anne_key::heprintln!("bt pair").ok();
                         keyboard.disable_bluetooth_mode();
                         led.bluetooth_pin_mode().log_error();
                     }
                     BleOp::Disconnect => {
                         // check this? sent after off, 14
-                        crate::heprintln!("bt disconnect").ok();
+                        anne_key::heprintln!("bt disconnect").ok();
                     }
                     BleOp::AckHostListQuery => {
                         if message.data.len() == 3 {
@@ -206,7 +210,8 @@ where
                         }
                     }
                     _ => {
-                        crate::heprintln!("msg: Ble {} {:?}", message.operation, message.data).ok();
+                        anne_key::heprintln!("msg: Ble {} {:?}", message.operation, message.data)
+                            .ok();
                     }
                 }
             }
@@ -215,7 +220,7 @@ where
                     led.set_theme(message.data[0]).log_error();
                 }
                 LedOp::GetUserStaticTheme => {
-                    crate::heprintln!("TODO: Theme Sync").ok();
+                    anne_key::heprintln!("TODO: Theme Sync").ok();
                     // [data_length, num_blocks, block_i]
                     //let data = [2 + 4, 1, 0, 1, 2, 3, 4];
                     //self.serial
@@ -223,28 +228,29 @@ where
                     //.log_error();
                 }
                 _ => {
-                    crate::heprintln!("msg: Led {} {:?}", message.operation, message.data).ok();
+                    anne_key::heprintln!("msg: Led {} {:?}", message.operation, message.data).ok();
                 }
             },
             MsgType::Keyboard => match KeyboardOp::from(message.operation) {
                 KeyboardOp::UpUserLayout => {
-                    crate::heprintln!("TODO: Keyboard Sync").ok();
+                    anne_key::heprintln!("TODO: Keyboard Sync").ok();
                 }
                 _ => {
-                    crate::heprintln!("msg: Keyboard {} {:?}", message.operation, message.data)
+                    anne_key::heprintln!("msg: Keyboard {} {:?}", message.operation, message.data)
                         .ok();
                 }
             },
             MsgType::Macro => match MacroOp::from(message.operation) {
                 MacroOp::SyncMacro => {
-                    crate::heprintln!("TODO: Macro Sync").ok();
+                    anne_key::heprintln!("TODO: Macro Sync").ok();
                 }
                 _ => {
-                    crate::heprintln!("msg: macro {} {:?}", message.operation, message.data).ok();
+                    anne_key::heprintln!("msg: macro {} {:?}", message.operation, message.data)
+                        .ok();
                 }
             },
             _ => {
-                crate::heprintln!(
+                anne_key::heprintln!(
                     "msg: {:?} {} {:?}",
                     message.msg_type,
                     message.operation,

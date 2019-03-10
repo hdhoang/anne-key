@@ -32,7 +32,6 @@ use hal::gpio::GpioExt;
 use rtfm::{app, Threshold};
 
 use crate::bluetooth::Bluetooth;
-use crate::debug::heprintln;
 use crate::keyboard::Keyboard;
 use crate::keymatrix::KeyMatrix;
 use crate::led::Led;

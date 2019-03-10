@@ -5,7 +5,6 @@ pub mod pma;
 pub mod usb_ext;
 
 use core::cmp::min;
-use rtfm::Threshold;
 
 use stm32l1::stm32l151;
 
@@ -14,6 +13,7 @@ use self::pma::PMA;
 use self::usb_ext::UsbEpExt;
 use crate::hidreport::HidReport;
 use crate::usb::hid::UsbHid;
+use crate::Threshold;
 
 const MAX_PACKET_SIZE: u32 = 64;
 
@@ -176,7 +176,7 @@ impl Usb {
             },
             UsbDescriptorType::Debug => None,
             _ => {
-                crate::heprintln!("get descriptor {:x}", value).ok();
+                anne_key::heprintln!("get descriptor {:x}", value).ok();
                 None
             }
         };
@@ -279,7 +279,7 @@ impl Usb {
                         self.usb.usb_ep0r.toggle_out();
                     }
                     _ => {
-                        crate::heprintln!("{:x}", value).ok();
+                        anne_key::heprintln!("{:x}", value).ok();
                         panic!();
                     }
                 }
@@ -313,7 +313,7 @@ impl Usb {
             }
             _ => {
                 // TODO get descriptor f00rt 82 GetStatus 82
-                crate::heprintln!("rt {:x} {:?} {:x}", request_type, request, request16).ok();
+                anne_key::heprintln!("rt {:x} {:?} {:x}", request_type, request, request16).ok();
                 panic!();
             }
         }

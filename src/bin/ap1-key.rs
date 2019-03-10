@@ -12,7 +12,6 @@ use hal::gpio::GpioExt;
 use rtfm::app;
 
 use anne_key::clock;
-use anne_key::debug::heprintln;
 
 const _BUFFER_SIZE: usize = 0x80;
 
@@ -25,11 +24,11 @@ const APP: () = {
     fn init() {
         // re-locate vector table to 0x80004000 because bootloader uses 0x80000000
         unsafe { core.SCB.vtor.write(0x4000) };
-        heprintln!("init").unwrap();
+        anne_key::heprintln!("init").unwrap();
         //        hprintln!("vector table relocated").ok();
         clock::init_clock(&device);
         clock::enable_tick(&mut core.SYST, 100_000);
-        heprintln!("clocked").unwrap();
+        anne_key::heprintln!("clocked").unwrap();
 
         let gpioc = device.GPIOC.split();
         gpioc.pc15;
@@ -37,7 +36,7 @@ const APP: () = {
 
     #[idle]
     fn idle() -> ! {
-        heprintln!("idle").unwrap();
+        anne_key::heprintln!("idle").unwrap();
         loop {}
     }
 };

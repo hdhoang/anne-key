@@ -4,12 +4,12 @@ use super::serial::led_usart::LedUsart;
 use super::serial::{Serial, Transfer};
 use crate::bluetooth::BluetoothMode;
 use crate::keycodes::KeyIndex;
+use crate::Threshold;
 use core::marker::Unsize;
 use embedded_hal::digital::OutputPin;
 use hal::gpio::gpioc::PC15;
 use hal::gpio::{Input, Output};
 use nb;
-use rtfm::Threshold;
 use stm32l1::stm32l151::SYST;
 
 pub enum LedMode {
@@ -210,17 +210,17 @@ where
                 match LedOp::from(message.operation) {
                     LedOp::AckThemeMode => {
                         // data: [theme id]
-                        //crate::heprintln!("Led AckThemeMode {:?}", message.data).ok();
+                        //anne_key::heprintln!("Led AckThemeMode {:?}", message.data).ok();
                     }
                     LedOp::AckConfigCmd => {
                         // data: [theme id, brightness, animation speed]
-                        //crate::heprintln!("Led AckConfigCmd {:?}", message.data).ok();
+                        //anne_key::heprintln!("Led AckConfigCmd {:?}", message.data).ok();
                     }
                     LedOp::AckSetIndividualKeys => {
                         // data: [202]
                     }
                     _ => {
-                        crate::heprintln!(
+                        anne_key::heprintln!(
                             "lmsg: {:?} {} {:?}",
                             message.msg_type,
                             message.operation,
@@ -231,7 +231,7 @@ where
                 }
             }
             _ => {
-                crate::heprintln!(
+                anne_key::heprintln!(
                     "lmsg: {:?} {} {:?}",
                     message.msg_type,
                     message.operation,
