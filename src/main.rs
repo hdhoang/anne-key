@@ -12,12 +12,11 @@ extern crate panic_semihosting;
 
 extern crate rtfm3 as rtfm;
 
-mod debug;
-
 #[macro_use]
 mod action;
 mod bluetooth;
 mod clock;
+mod debug;
 mod hidreport;
 mod keyboard;
 mod keycodes;
