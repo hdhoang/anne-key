@@ -52,7 +52,6 @@ app! {
         static BLUETOOTH: Bluetooth<[u8; 0x80]>;
         static LED_BUFFERS: [[u8; 0x80]; 2] = [[0; 0x80]; 2];
         static LED: Led<[u8; 0x80]>;
-        static SCB: stm32l1::stm32l151::SCB;
         static SYST: stm32l1::stm32l151::SYST;
         static EXTI: stm32l1::stm32l151::EXTI;
         static USB: Usb;
@@ -65,7 +64,7 @@ app! {
     tasks: {
         SysTick: {
             path: tick,
-            resources: [BLUETOOTH, LED, KEY_MATRIX, SCB, SYST, KEYBOARD, USB],
+            resources: [BLUETOOTH, LED, KEY_MATRIX, SYST, KEYBOARD, USB],
         },
         USB_LP: {
             path: usb::usb_lp,
@@ -192,7 +191,6 @@ fn init(p: init::Peripherals, resources: init::Resources<'_>) -> init::LateResou
         BLUETOOTH: bluetooth,
         KEY_MATRIX: key_matrix,
         LED: led,
-        SCB: core.SCB,
         SYST: core.SYST,
         EXTI: device.EXTI,
         USB: usb,
@@ -211,7 +209,6 @@ fn tick(_t: &mut Threshold, mut resources: SysTick::Resources) {
         &resources.KEY_MATRIX.state,
         &mut resources.BLUETOOTH,
         &mut resources.LED,
-        &mut resources.SCB,
         &mut resources.USB,
     );
 }

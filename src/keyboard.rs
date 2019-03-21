@@ -51,7 +51,6 @@ impl Keyboard {
         state: &KeyState,
         bluetooth: &mut Bluetooth<BUFFER>,
         led: &mut Led<BUFFER>,
-        scb: &mut SCB,
         usb: &mut Usb,
     ) where
         BUFFER: Unsize<[u8]>,
@@ -68,8 +67,9 @@ impl Keyboard {
                 // cut down on processing time.
                 if pressed || changed {
                     let action = self.get_action(key);
-                    if let Action::Reset = action {
-                        scb.system_reset()
+                    if pressed && Action::Reset == action {
+                        crate::heprintln!("system reset").ok();
+                        SCB::system_reset2()
                     }
                     if pressed && Action::UsbToggle == action {
                         self.send_usb_report = !self.send_usb_report;
