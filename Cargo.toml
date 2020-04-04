@@ -11,7 +11,7 @@ version = "0.0.2"
 
 [dependencies]
 bare-metal = { version = "0.2.4", features = ["const-fn"] }
-bit_field = "0.9.0"
+bit_field = "0.10.0"
 cortex-m = "0.5.8"
 cortex-m-rt = "0.6.5"
 cortex-m-semihosting = "0.3.1"
