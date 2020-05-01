@@ -29,7 +29,7 @@ dependencies = [
  "nb",
  "panic-abort",
  "panic-semihosting",
- "stm32l1",
+ "stm32l1 0.11.0",
  "stm32l151-hal",
  "vcell",
 ]
@@ -353,6 +353,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "stm32l1"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e30748fec0ab997a376187787819f174a85c068c1cd27eb80fdd4ca2a16048a9"
+dependencies = [
+ "bare-metal",
+ "cortex-m 0.6.2",
+ "cortex-m-rt",
+ "vcell",
+]
+
+[[package]]
 name = "stm32l151-hal"
 version = "0.6.0"
 source = "git+https://github.com/hdhoang/stm32l151-hal?branch=stm32l1-0.5#bf69676077d64c89d6f26c9af88765ad8a4023ae"
@@ -360,7 +372,7 @@ dependencies = [
  "cortex-m 0.5.10",
  "embedded-hal",
  "nb",
- "stm32l1",
+ "stm32l1 0.5.0",
 ]
 
 [[package]]
